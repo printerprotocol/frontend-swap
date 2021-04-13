@@ -80,8 +80,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-mainnet": "bash ./deploy-mainnet.sh",
-    "build-testnet": "bash ./deploy-testnet.sh",
+    "mainnet": "deploy.cmd",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
