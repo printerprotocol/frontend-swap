@@ -23,12 +23,12 @@ const config: MenuEntry[] = [
     {
         label: 'Printers',
         icon: 'FarmIcon',
-        href: '/farms',
+        href: 'https://printershares.finance/printers',
     },
     {
         label: 'Papers',
         icon: 'PoolIcon',
-        href: '/nests',
+        href: 'https://printershares.finance/papers',
     },
     {
         label: 'Info',

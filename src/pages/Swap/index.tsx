@@ -273,7 +273,7 @@ const Swap = () => {
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
           />
-          <PageHeader title="Exchange" description="Trade tokens in an instant" />
+          <PageHeader title="Exchange" description="Please, use rounded values to avoid errors. Ex: use 100 instead of 100.11111" />
           <CardBody>
             <AutoColumn gap="md">
               <CurrencyInputPanel
