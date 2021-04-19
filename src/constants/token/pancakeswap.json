@@ -2,7 +2,7 @@
   "name": "pancakeswap",
   "timestamp": "2021-03-18T15:41:29.665Z",
   "version": {
-    "major": 7,
+    "major": 8,
     "minor": 3,
     "patch": 1
   },
@@ -114,6 +114,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "/images/coins/DAI.png"
+    },
+    {
+      "name": "SAFESTAR",
+      "symbol": "SAFESTAR",
+      "address": "0x3C00F8FCc8791fa78DAA4A480095Ec7D475781e2",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "/images/coins/safestar.png"
     }
   ]
 }
