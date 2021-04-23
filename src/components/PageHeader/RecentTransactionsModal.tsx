@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { CheckmarkCircleIcon, ErrorIcon, Flex, LinkExternal, Text, Modal, Button } from '@pancakeswap-libs/uikit'
+import { CheckmarkCircleIcon, ErrorIcon, Flex, LinkExternal, Text, Modal, Button } from 'printersharesfinance-uikit'
 import { useActiveWeb3React } from 'hooks'
-import { getBscScanLink } from 'utils'
+import { getEtherscanLink } from 'utils'
 import { isTransactionRecent, useAllTransactions } from 'state/transactions/hooks'
 import { TransactionDetails } from 'state/transactions/reducer'
 import Loader from 'components/Loader'
@@ -70,7 +70,7 @@ const RecentTransactionsModal = ({ onDismiss = defaultOnDismiss }: RecentTransac
           return (
             <>
               <Flex key={hash} alignItems="center" justifyContent="space-between" mb="4px">
-                <LinkExternal href={getBscScanLink(chainId, hash, 'transaction')} color={color}>
+                <LinkExternal href={getEtherscanLink(chainId, hash, 'transaction')} color={color}>
                   {summary ?? hash}
                 </LinkExternal>
                 {icon}

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@pancakeswap-libs/sdk'
-import { Button, CardBody, AddIcon, Text as UIKitText } from '@pancakeswap-libs/uikit'
+import { Button, CardBody, AddIcon, Text as UIKitText } from 'printersharesfinance-uikit'
 import { RouteComponentProps } from 'react-router-dom'
 import { LightCard } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
@@ -23,6 +23,7 @@ import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'state/m
 
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from 'state/user/hooks'
+import { TYPE } from 'components/Shared'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from 'utils'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
@@ -34,6 +35,8 @@ import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 import { ROUTER_ADDRESS } from '../../constants'
+
+const { italic: Italic } = TYPE
 
 export default function AddLiquidity({
   match: {
@@ -223,11 +226,11 @@ export default function AddLiquidity({
             {`${currencies[Field.CURRENCY_A]?.symbol}/${currencies[Field.CURRENCY_B]?.symbol} Pool Tokens`}
           </UIKitText>
         </Row>
-        <UIKitText small textAlign="left" padding="8px 0 0 0 " style={{ fontStyle: 'italic' }}>
+        <Italic fontSize={12} textAlign="left" padding="8px 0 0 0 ">
           {`Output is estimated. If the price changes by more than ${
             allowedSlippage / 100
           }% your transaction will revert.`}
-        </UIKitText>
+        </Italic>
       </AutoColumn>
     )
   }
@@ -434,7 +437,6 @@ export default function AddLiquidity({
           <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
         </AutoColumn>
       ) : null}
-
     </>
   )
 }

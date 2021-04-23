@@ -1,17 +1,19 @@
 import { Token } from '@pancakeswap-libs/sdk'
 import { transparentize } from 'polished'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from 'printersharesfinance-uikit'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AlertTriangle } from 'react-feather'
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens } from '../../hooks/Tokens'
-import { getBscScanLink, shortenAddress } from '../../utils'
-import { ExternalLink } from '../Shared'
+import { ExternalLink, TYPE } from '../Shared'
+import { getEtherscanLink, shortenAddress } from '../../utils'
 import CurrencyLogo from '../CurrencyLogo'
 import Modal from '../Modal'
 import { AutoRow, RowBetween } from '../Row'
 import { AutoColumn } from '../Column'
+
+const { main: Main, blue: Blue } = TYPE
 
 const Wrapper = styled.div<{ error: boolean }>`
   background: ${({ theme }) => transparentize(0.6, theme.colors.tertiary)};
@@ -67,14 +69,14 @@ function TokenWarningCard({ token }: TokenWarningCardProps) {
           <div> </div>
         </AutoColumn>
         <AutoColumn gap="10px" justify="flex-start">
-          <Text>
+          <Main>
             {token && token.name && token.symbol && token.name !== token.symbol
               ? `${token.name} (${token.symbol})`
               : token.name || token.symbol}{' '}
-          </Text>
+          </Main>
           {chainId && (
-            <ExternalLink style={{ fontWeight: 400 }} href={getBscScanLink(chainId, token.address, 'token')}>
-              <Text title={token.address}>{shortenAddress(token.address)} (View on BscScan)</Text>
+            <ExternalLink style={{ fontWeight: 400 }} href={getEtherscanLink(chainId, token.address, 'token')}>
+              <Blue title={token.address}>{shortenAddress(token.address)} (View on BscScan)</Blue>
             </ExternalLink>
           )}
         </AutoColumn>

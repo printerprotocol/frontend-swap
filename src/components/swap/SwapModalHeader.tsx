@@ -1,15 +1,19 @@
 import React, { useContext, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Trade, TradeType } from '@pancakeswap-libs/sdk'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from 'printersharesfinance-uikit'
 import { ArrowDown, AlertTriangle } from 'react-feather'
+
 import { Field } from '../../state/swap/actions'
+import { TYPE } from '../Shared'
 import { isAddress, shortenAddress } from '../../utils'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { AutoColumn } from '../Column'
 import CurrencyLogo from '../CurrencyLogo'
 import { RowBetween, RowFixed } from '../Row'
 import { SwapShowAcceptChanges } from './styleds'
+
+const { main: Main } = TYPE
 
 const PriceInfoText = styled(Text)`
   font-style: italic;
@@ -92,7 +96,7 @@ export default function SwapModalHeader({
           <RowBetween>
             <RowFixed>
               <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
-              <Text color="primary"> Price Updated</Text>
+              <Main color={theme.colors.primary}> Price Updated</Main>
             </RowFixed>
             <Button onClick={onAcceptChanges}>Accept</Button>
           </RowBetween>
@@ -119,10 +123,10 @@ export default function SwapModalHeader({
       </AutoColumn>
       {recipient !== null ? (
         <AutoColumn justify="flex-start" gap="sm" style={{ padding: '16px 0 0' }}>
-          <Text>
+          <Main>
             Output will be sent to{' '}
             <b title={recipient}>{isAddress(recipient) ? shortenAddress(recipient) : recipient}</b>
-          </Text>
+          </Main>
         </AutoColumn>
       ) : null}
     </AutoColumn>

@@ -1,10 +1,10 @@
 import { ChainId } from '@pancakeswap-libs/sdk'
 import React, { useContext } from 'react'
 import { ThemeContext } from 'styled-components'
-import { Button, LinkExternal } from '@pancakeswap-libs/uikit'
+import { Button, LinkExternal } from 'printersharesfinance-uikit'
 import { ArrowUpCircle } from 'react-feather'
 import { AutoColumn } from '../Column'
-import { getBscScanLink } from '../../utils'
+import { getEtherscanLink } from '../../utils'
 import { Wrapper, Section, ConfirmedIcon, ContentHeader } from './helpers'
 
 type TransactionSubmittedContentProps = {
@@ -25,7 +25,7 @@ const TransactionSubmittedContent = ({ onDismiss, chainId, hash }: TransactionSu
         </ConfirmedIcon>
         <AutoColumn gap="8px" justify="center">
           {chainId && hash && (
-            <LinkExternal href={getBscScanLink(chainId, hash, 'transaction')}>View on BscScan</LinkExternal>
+            <LinkExternal href={getEtherscanLink(chainId, hash, 'transaction')}>View on bscscan</LinkExternal>
           )}
           <Button onClick={onDismiss} mt="20px">
             Close

@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from 'printersharesfinance-uikit'
 import { AlertTriangle } from 'react-feather'
+import { TYPE } from '../Shared'
 import Modal from '../Modal'
 import { AutoRow, RowBetween } from '../Row'
 import { AutoColumn } from '../Column'
+
+const { main: Main, body: Body } = TYPE
 
 const WarningContainer = styled.div`
   max-width: 420px;
@@ -39,18 +42,18 @@ export default function SyrupWarningModal({
         <AutoColumn gap="lg">
           <AutoRow gap="6px">
             <StyledWarningIcon />
-            <Text color="failure">Syrup Warning</Text>
+            <Main color="failure">Syrup Warning</Main>
           </AutoRow>
           {transactionType !== '' && (
             <>
-              <Text color="failure">
+              <Body color="failure">
                 Please be careful when <strong>{transactionType}</strong> SYRUP.
-              </Text>
-              <Text color="failure">
+              </Body>
+              <Body color="failure">
                 {transactionType === 'Buying'
                   ? 'You will not receive CAKE rewards for holding purchased SYRUP.'
                   : 'You will need to buy back the same amount of SYRUP to be able to convert back to CAKE.'}
-              </Text>
+              </Body>
             </>
           )}
           <RowBetween>

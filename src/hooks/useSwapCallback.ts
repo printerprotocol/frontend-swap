@@ -3,13 +3,17 @@ import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@pancakeswap-libs/sdk'
 import { useMemo } from 'react'
 import { BIPS_BASE, DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
 import isZero from '../utils/isZero'
+import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
+import { useV1ExchangeContract } from './useContract'
 import useENS from './useENS'
+import { Version } from './useToggledVersion'
 
- enum SwapCallbackState {
+export enum SwapCallbackState {
   INVALID,
   LOADING,
   VALID,
@@ -50,40 +54,57 @@ function useSwapCallArguments(
   const { address: recipientAddress } = useENS(recipientAddressOrName)
   const recipient = recipientAddressOrName === null ? account : recipientAddress
 
-  return useMemo(() => {
-    if (!trade || !recipient || !library || !account || !chainId) return []
+  const v1Exchange = useV1ExchangeContract(useV1TradeExchangeAddress(trade), true)
 
-    const contract: Contract | null = getRouterContract(chainId, library, account)
+  return useMemo(() => {
+    const tradeVersion = getTradeVersion(trade)
+    if (!trade || !recipient || !library || !account || !tradeVersion || !chainId) return []
+
+    const contract: Contract | null =
+      tradeVersion === Version.v2 ? getRouterContract(chainId, library, account) : v1Exchange
     if (!contract) {
       return []
     }
 
     const swapMethods = []
 
-    swapMethods.push(
-      // @ts-ignore
-      Router.swapCallParameters(trade, {
-        feeOnTransfer: false,
-        allowedSlippage: new Percent(JSBI.BigInt(Math.floor(allowedSlippage)), BIPS_BASE),
-        recipient,
-        ttl: deadline,
-      })
-    )
+    switch (tradeVersion) {
+      case Version.v2:
+        swapMethods.push(
+          // @ts-ignore
+          Router.swapCallParameters(trade, {
+            feeOnTransfer: false,
+            allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+            recipient,
+            ttl: deadline,
+          })
+        )
 
-    if (trade.tradeType === TradeType.EXACT_INPUT) {
-      swapMethods.push(
-        // @ts-ignore
-        Router.swapCallParameters(trade, {
-          feeOnTransfer: true,
-          allowedSlippage: new Percent(JSBI.BigInt(Math.floor(allowedSlippage)), BIPS_BASE),
-          recipient,
-          ttl: deadline,
-        })
-      )
+        if (trade.tradeType === TradeType.EXACT_INPUT) {
+          swapMethods.push(
+            // @ts-ignore
+            Router.swapCallParameters(trade, {
+              feeOnTransfer: true,
+              allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+              recipient,
+              ttl: deadline,
+            })
+          )
+        }
+        break
+      case Version.v1:
+        swapMethods.push(
+          // @ts-ignore
+          v1SwapArguments(trade, {
+            allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+            recipient,
+            ttl: deadline,
+          })
+        )
+        break
     }
-
     return swapMethods.map((parameters) => ({ parameters, contract }))
-  }, [account, allowedSlippage, chainId, deadline, library, recipient, trade])
+  }, [account, allowedSlippage, chainId, deadline, library, recipient, trade, v1Exchange])
 }
 
 // returns a function that will execute a swap, if the parameters are all valid
@@ -113,6 +134,8 @@ export function useSwapCallback(
       }
       return { state: SwapCallbackState.LOADING, callback: null, error: null }
     }
+
+    const tradeVersion = getTradeVersion(trade)
 
     return {
       state: SwapCallbackState.VALID,
@@ -198,8 +221,11 @@ export function useSwapCallback(
                       : recipientAddressOrName
                   }`
 
+            const withVersion =
+              tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
+
             addTransaction(response, {
-              summary: withRecipient,
+              summary: withVersion,
             })
 
             return response.hash
@@ -219,5 +245,3 @@ export function useSwapCallback(
     }
   }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction])
 }
-
-export default useSwapCallback

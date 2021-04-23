@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem } from '@pancakeswap-libs/uikit'
+import { ButtonMenu, ButtonMenuItem } from 'printersharesfinance-uikit'
 import TranslatedText from '../TranslatedText'
 
 const StyledNav = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `
 
 const Nav = ({ activeIndex = 0 }: { activeIndex?: number }) => (
@@ -20,7 +20,7 @@ const Nav = ({ activeIndex = 0 }: { activeIndex?: number }) => (
       <ButtonMenuItem
         id="pool-nav-link"
         as="a"
-        href="https://www.binance.org/en/bridge?utm_source=PrinterSwap"
+        href="https://www.binance.org/en/panama"
         target="_blank"
         rel="noreferrer noopener"
       >

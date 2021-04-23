@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react'
-import styled from 'styled-components'
-import { Text } from '@pancakeswap-libs/uikit'
+import React, { useContext, useCallback } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 import useENS from '../../hooks/useENS'
 import { useActiveWeb3React } from '../../hooks'
-import { ExternalLink } from '../Shared'
+import { ExternalLink, TYPE } from '../Shared'
 import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
-import { getBscScanLink } from '../../utils'
+import { getEtherscanLink } from '../../utils'
+
+const { black: Black } = TYPE
 
 const InputPanel = styled.div`
   display: flex;
@@ -79,6 +80,7 @@ export default function AddressInputPanel({
   onChange: (value: string) => void
 }) {
   const { chainId } = useActiveWeb3React()
+  const theme = useContext(ThemeContext)
 
   const { address, loading, name } = useENS(value)
 
@@ -99,12 +101,12 @@ export default function AddressInputPanel({
         <InputContainer>
           <AutoColumn gap="md">
             <RowBetween>
-              <Text color="textSubtle" fontWeight={500} fontSize="14px">
+              <Black color={theme.colors.textSubtle} fontWeight={500} fontSize={14}>
                 Recipient
-              </Text>
+              </Black>
               {address && chainId && (
-                <ExternalLink href={getBscScanLink(chainId, name ?? address, 'address')} style={{ fontSize: '14px' }}>
-                  (View on BscScan)
+                <ExternalLink href={getEtherscanLink(chainId, name ?? address, 'address')} style={{ fontSize: '14px' }}>
+                  (View on bscscan)
                 </ExternalLink>
               )}
             </RowBetween>
